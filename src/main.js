@@ -195,7 +195,7 @@ function addGroundSprites(groundY) {
     { id: 1, x: 3.0, y: groundY - 0.95, z: 1.8, h: 0.85 },   // Viperwolf (outer)
     { id: 4, x: -3.8, y: groundY - 0.95, z: 0.6, h: 1.1 },   // Thanator (outer left)
     { id: 5, x: 3.4, y: groundY - 0.95, z: -1.6, h: 1.05 }, // Direhorse (outer)
-    { id: 12, x: -1.4, y: groundY + 0.35, z: 1.4, h: 1.0 },  // Na'vi (unchanged)
+    { id: 12, x: -1.4, y: groundY - 2.15, z: 1.4, h: 1.0 },  // Na'vi (same height as flower)
   ];
   configs.forEach(({ id, x, y, z, h }) => {
     const num = String(id).padStart(2, '0');
