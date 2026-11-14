@@ -191,8 +191,13 @@ function groundFlower() {
 
 function addGroundSprites(groundY) {
   const texLoader = new THREE.TextureLoader();
-  const ids = [1, 4, 5, 12];
-  ids.forEach((id, idx) => {
+  const configs = [
+    { id: 1, x: 1.6, y: groundY + 0.55, z: 0.8, h: 0.85 },   // Viperwolf
+    { id: 4, x: -2.8, y: groundY + 0.4, z: 0.2, h: 1.1 },   // Thanator (left)
+    { id: 5, x: 2.2, y: groundY + 0.55, z: -0.9, h: 1.05 }, // Direhorse
+    { id: 12, x: -1.4, y: groundY + 0.35, z: 1.4, h: 1.0 }, // Na'vi
+  ];
+  configs.forEach(({ id, x, y, z, h }) => {
     const num = String(id).padStart(2, '0');
     texLoader.load(`/sprites/sprite_${num}.png`, (tex) => {
       tex.colorSpace = THREE.SRGBColorSpace;
@@ -208,14 +213,8 @@ function addGroundSprites(groundY) {
       sprite.center.set(0.5, 0);
 
       const aspect = tex.image.width / tex.image.height;
-      const height = 0.85 + (idx % 2) * 0.25;
-      sprite.scale.set(height * aspect, height, 1);
-
-      const angle = (idx / ids.length) * Math.PI * 2;
-      const radius = 2.2 + (idx % 2) * 0.6;
-      const sx = Math.cos(angle) * radius;
-      const sz = Math.sin(angle) * radius;
-      sprite.position.set(sx, groundY, sz);
+      sprite.scale.set(h * aspect, h, 1);
+      sprite.position.set(x, y, z);
       scene.add(sprite);
     });
   });
