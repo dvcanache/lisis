@@ -19,7 +19,47 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NoToneMapping;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x050b1a);
+scene.background = new THREE.Color(0x030612);
+
+// Night sky with many stars
+function createStarfield() {
+  const count = 1600;
+  const positions = new Float32Array(count * 3);
+  const colors = new Float32Array(count * 3);
+  const palette = [
+    new THREE.Color(0xffffff),
+    new THREE.Color(0x9be8ff),
+    new THREE.Color(0xc8d8ff),
+    new THREE.Color(0x7bf5ff),
+  ];
+
+  for (let i = 0; i < count; i++) {
+    const r = 28 + Math.random() * 35;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+    positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+    positions[i * 3 + 2] = r * Math.cos(phi);
+
+    const col = palette[(Math.random() * palette.length) | 0];
+    colors[i * 3] = col.r;
+    colors[i * 3 + 1] = col.g;
+    colors[i * 3 + 2] = col.b;
+  }
+
+  const geom = new THREE.BufferGeometry();
+  geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  const mat = new THREE.PointsMaterial({
+    size: 0.22,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.9,
+  });
+  return new THREE.Points(geom, mat);
+}
+
+scene.add(createStarfield());
 
 const initialAspect = window.innerWidth / window.innerHeight;
 const camera = new THREE.PerspectiveCamera(45, initialAspect, 0.1, 100);
@@ -137,14 +177,11 @@ function updateDimensions() {
 
 function groundFlower() {
   if (!modelRoot || !bgRoot) return;
-  const bgBox = new THREE.Box3().setFromObject(bgRoot);
-  const flowerBox = new THREE.Box3().setFromObject(modelRoot);
-  const deltaY = bgBox.min.y - flowerBox.min.y;
-  modelRoot.position.y += deltaY + 0.55;
+  modelRoot.position.y = -0.3;
   flowerBaseY = modelRoot.position.y;
-  controls.target.set(0, flowerBaseY + 0.8, 0);
+  controls.target.set(0, 0, 0);
   controls.update();
-  addGroundSprites(bgBox.min.y);
+  addGroundSprites(-0.85);
 }
 
 function addGroundSprites(groundY) {
