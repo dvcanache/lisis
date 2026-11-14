@@ -144,6 +144,37 @@ function groundFlower() {
   flowerBaseY = modelRoot.position.y;
   controls.target.set(0, flowerBaseY + 0.8, 0);
   controls.update();
+  addGroundSprites(bgBox.min.y);
+}
+
+function addGroundSprites(groundY) {
+  const texLoader = new THREE.TextureLoader();
+  const count = 21;
+  for (let i = 1; i <= count; i++) {
+    const num = String(i).padStart(2, '0');
+    texLoader.load(`/sprites/sprite_${num}.png`, (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.magFilter = THREE.NearestFilter;
+      tex.minFilter = THREE.NearestFilter;
+
+      const mat = new THREE.SpriteMaterial({
+        map: tex,
+        transparent: true,
+        alphaTest: 0.1,
+      });
+      const sprite = new THREE.Sprite(mat);
+      sprite.center.set(0.5, 0);
+
+      const aspect = tex.image.width / tex.image.height;
+      const height = 0.75 + (i % 3) * 0.25;
+      sprite.scale.set(height * aspect, height, 1);
+
+      const angle = ((i - 1) / count) * Math.PI * 2;
+      const radius = 2.4 + (i % 3) * 0.9;
+      sprite.position.set(Math.cos(angle) * radius, groundY, Math.sin(angle) * radius);
+      scene.add(sprite);
+    });
+  }
 }
 
 function onAssetReady() {
