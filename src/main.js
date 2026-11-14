@@ -3,27 +3,18 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 
-const RAMP = ' .:-=+*#%@';
-const RAMP_MAX = RAMP.length - 1;
-const CELL_SIZE = 4;
 const ROT_SPEED = 0.4;
-const GLOW_STRENGTH = 0.85;
 
 const asciiCanvas = document.getElementById('ascii-canvas');
-const asciiCtx = asciiCanvas.getContext('2d', { alpha: false });
-const glowCanvas = document.createElement('canvas');
-const glowCtx = glowCanvas.getContext('2d');
-
 const loadingOverlay = document.getElementById('loading-overlay');
 const loadingText = document.getElementById('loading-text');
 
-// Offscreen WebGL renderer
-const glCanvas = document.createElement('canvas');
 const renderer = new THREE.WebGLRenderer({
-  canvas: glCanvas,
-  antialias: false,
+  canvas: asciiCanvas,
+  antialias: true,
   powerPreference: 'high-performance',
 });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NoToneMapping;
 
@@ -130,38 +121,11 @@ const naviTextMesh = createNaviTextMesh();
 scene.add(naviTextMesh);
 
 function updateDimensions() {
-  viewWidth = window.innerWidth;
-  viewHeight = window.innerHeight;
-  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-
-  asciiCanvas.width = (viewWidth * dpr) | 0;
-  asciiCanvas.height = (viewHeight * dpr) | 0;
-  asciiCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-  camera.aspect = viewWidth / viewHeight;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  renderer.setSize(width, height, false);
+  camera.aspect = width / height;
   camera.updateProjectionMatrix();
-
-  const targetCellW = CELL_SIZE * 0.62;
-  const newCols = Math.max(20, (viewWidth / targetCellW) | 0);
-  const newRows = Math.max(12, (viewHeight / CELL_SIZE) | 0);
-  cellW = viewWidth / newCols;
-
-  if (newCols !== cols || newRows !== rows) {
-    cols = newCols;
-    rows = newRows;
-
-    if (renderTarget) renderTarget.dispose();
-    renderTarget = new THREE.WebGLRenderTarget(cols, rows, {
-      minFilter: THREE.LinearFilter,
-      magFilter: THREE.LinearFilter,
-      format: THREE.RGBAFormat,
-      type: THREE.UnsignedByteType,
-    });
-    pixelBuffer = new Uint8Array(cols * rows * 4);
-
-    glowCanvas.width = Math.max(1, (viewWidth * 0.4) | 0);
-    glowCanvas.height = Math.max(1, (viewHeight * 0.4) | 0);
-  }
 }
 
 function groundFlower() {
@@ -339,7 +303,7 @@ function animate() {
   }
 
   controls.update();
-  renderAsciiFrame();
+  renderer.render(scene, camera);
 }
 
 const bgMusic = document.getElementById('bg-music');
