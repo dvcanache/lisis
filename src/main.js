@@ -181,14 +181,14 @@ function groundFlower() {
   flowerBaseY = modelRoot.position.y;
   controls.target.set(0, 0, 0);
   controls.update();
-  addGroundSprites(-0.85);
+  addGroundSprites(-0.25);
 }
 
 function addGroundSprites(groundY) {
   const texLoader = new THREE.TextureLoader();
-  const count = 21;
-  for (let i = 1; i <= count; i++) {
-    const num = String(i).padStart(2, '0');
+  const ids = [1, 2, 3, 4, 5, 9, 12];
+  ids.forEach((id, idx) => {
+    const num = String(id).padStart(2, '0');
     texLoader.load(`/sprites/sprite_${num}.png`, (tex) => {
       tex.colorSpace = THREE.SRGBColorSpace;
       tex.magFilter = THREE.NearestFilter;
@@ -203,15 +203,15 @@ function addGroundSprites(groundY) {
       sprite.center.set(0.5, 0);
 
       const aspect = tex.image.width / tex.image.height;
-      const height = 0.75 + (i % 3) * 0.25;
+      const height = 0.85 + (idx % 2) * 0.25;
       sprite.scale.set(height * aspect, height, 1);
 
-      const angle = ((i - 1) / count) * Math.PI * 2;
-      const radius = 2.4 + (i % 3) * 0.9;
+      const angle = (idx / ids.length) * Math.PI * 2;
+      const radius = 2.4 + (idx % 2) * 0.7;
       sprite.position.set(Math.cos(angle) * radius, groundY, Math.sin(angle) * radius);
       scene.add(sprite);
     });
-  }
+  });
 }
 
 function onAssetReady() {
