@@ -19,7 +19,7 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NoToneMapping;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x010208);
+scene.background = new THREE.Color(0x070d24);
 
 // Night sky with many colorful stars
 function createStarfield() {
