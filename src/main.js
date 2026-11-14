@@ -123,7 +123,7 @@ function createNaviTextMesh() {
 
 const naviTextMesh = createNaviTextMesh();
 naviTextMesh.position.set(0, 1.5, 11);
-naviTextMesh.scale.setScalar(2.4);
+naviTextMesh.scale.setScalar(4.2);
 scene.add(naviTextMesh);
 
 function updateDimensions() {
