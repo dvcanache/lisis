@@ -46,7 +46,8 @@ controls.touches = {
 };
 
 // Lighting
-scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+scene.add(new THREE.AmbientLight(0xffffff, 1.35));
+scene.add(new THREE.HemisphereLight(0x88e0ff, 0x1a2b24, 0.9));
 
 const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
 keyLight.position.set(3, 5, 4);
@@ -228,13 +229,13 @@ function loadModel() {
       const size = box.getSize(new THREE.Vector3());
       const center = box.getCenter(new THREE.Vector3());
       const maxDim = Math.max(size.x, size.y, size.z) || 1;
-      const scale = 20 / maxDim;
+      const scale = 12 / maxDim;
 
       bgFbx.position.sub(center);
       const bgWrapper = new THREE.Group();
       bgWrapper.add(bgFbx);
       bgWrapper.scale.setScalar(scale);
-      bgWrapper.position.set(0, -1.8, -5.5);
+      bgWrapper.position.set(0, -0.4, -4.5);
       scene.add(bgWrapper);
 
       onAssetReady();
@@ -274,7 +275,7 @@ function renderAsciiFrame() {
 
       // Original luminance (no contrast distortion)
       const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-      if (lum < 0.03) continue;
+      if (lum < 0.015) continue;
 
       const charIdx = Math.min(RAMP_MAX, (lum * RAMP_MAX + 0.5) | 0);
       const ch = RAMP[charIdx];
