@@ -195,7 +195,9 @@ function loadModel() {
         mixer.clipAction(fbx.animations[0]).play();
       }
 
-      loadingOverlay.classList.add('hidden');
+      document.getElementById('loader-spinner').classList.add('hidden');
+      loadingText.classList.add('hidden');
+      document.getElementById('btn-start').classList.remove('hidden');
     },
     (xhr) => {
       if (xhr.total > 0) {
@@ -284,53 +286,13 @@ function animate() {
   renderAsciiFrame();
 }
 
-// Music controls (Leona Lewis - I See You Instrumental)
 const bgMusic = document.getElementById('bg-music');
-const btnMusic = document.getElementById('btn-music');
-const musicLabel = document.getElementById('music-label');
-let isPlaying = false;
+const btnStart = document.getElementById('btn-start');
 
-function updateMusicUI(playing) {
-  isPlaying = playing;
-  btnMusic.classList.toggle('playing', playing);
-  musicLabel.textContent = playing ? 'Music On' : 'Play Music';
-}
-
-async function toggleMusic() {
-  if (isPlaying) {
-    bgMusic.pause();
-    updateMusicUI(false);
-  } else {
-    try {
-      await bgMusic.play();
-      updateMusicUI(true);
-    } catch {
-      musicLabel.textContent = 'Add MP3';
-    }
-  }
-}
-
-btnMusic.addEventListener('click', toggleMusic);
-
-// Auto-start music on first user interaction (mobile/browser policy)
-function autoStartMusic() {
-  if (!isPlaying) {
-    bgMusic
-      .play()
-      .then(() => updateMusicUI(true))
-      .catch(() => {});
-  }
-  window.removeEventListener('pointerdown', autoStartMusic);
-  window.removeEventListener('touchstart', autoStartMusic);
-}
-window.addEventListener('pointerdown', autoStartMusic, { once: true });
-window.addEventListener('touchstart', autoStartMusic, { once: true });
-
-// Attempt immediate autoplay on page load
-bgMusic
-  .play()
-  .then(() => updateMusicUI(true))
-  .catch(() => {});
+btnStart.addEventListener('click', () => {
+  loadingOverlay.classList.add('hidden');
+  bgMusic.play().catch(() => {});
+});
 
 window.addEventListener('resize', updateDimensions);
 
