@@ -175,16 +175,31 @@ function updateDimensions() {
   camera.updateProjectionMatrix();
 }
 
-function groundFlower() {
-  if (!modelRoot || !bgRoot) return;
-  modelRoot.position.y = -0.3;
-  flowerBaseY = modelRoot.position.y;
-  controls.target.set(0, 0, 0);
-  controls.update();
-  addGroundSprites(-0.25);
+function getGroundY(x, z, fallbackY = -1.5) {
+  if (!bgRoot) return fallbackY;
+  const raycaster = new THREE.Raycaster(
+    new THREE.Vector3(x, 10, z),
+    new THREE.Vector3(0, -1, 0)
+  );
+  const hits = raycaster.intersectObject(bgRoot, true);
+  if (hits.length > 0) {
+    return hits[0].point.y;
+  }
+  return fallbackY;
 }
 
-function addGroundSprites(groundY) {
+function groundFlower() {
+  if (!modelRoot || !bgRoot) return;
+  const flowerBox = new THREE.Box3().setFromObject(modelRoot);
+  const groundY = getGroundY(0, 0, -1.5);
+  modelRoot.position.y += groundY - flowerBox.min.y;
+  flowerBaseY = modelRoot.position.y;
+  controls.target.set(0, flowerBaseY + 0.5, 0);
+  controls.update();
+  addGroundSprites();
+}
+
+function addGroundSprites() {
   const texLoader = new THREE.TextureLoader();
   const ids = [1, 4, 5, 12];
   ids.forEach((id, idx) => {
@@ -207,8 +222,11 @@ function addGroundSprites(groundY) {
       sprite.scale.set(height * aspect, height, 1);
 
       const angle = (idx / ids.length) * Math.PI * 2;
-      const radius = 2.4 + (idx % 2) * 0.7;
-      sprite.position.set(Math.cos(angle) * radius, groundY, Math.sin(angle) * radius);
+      const radius = 2.2 + (idx % 2) * 0.6;
+      const sx = Math.cos(angle) * radius;
+      const sz = Math.sin(angle) * radius;
+      const sy = getGroundY(sx, sz, -1.5);
+      sprite.position.set(sx, sy, sz);
       scene.add(sprite);
     });
   });
