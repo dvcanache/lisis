@@ -186,7 +186,7 @@ function groundFlower() {
 
 function addGroundSprites(groundY) {
   const texLoader = new THREE.TextureLoader();
-  const ids = [1, 2, 3, 4, 5, 9, 12];
+  const ids = [1, 4, 5, 9, 12];
   ids.forEach((id, idx) => {
     const num = String(id).padStart(2, '0');
     texLoader.load(`/sprites/sprite_${num}.png`, (tex) => {
