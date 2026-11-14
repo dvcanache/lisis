@@ -192,9 +192,9 @@ function groundFlower() {
 function addGroundSprites(groundY) {
   const texLoader = new THREE.TextureLoader();
   const configs = [
-    { id: 1, x: 3.0, y: groundY - 1.35, z: 1.8, h: 0.85 },   // Viperwolf (a bit lower)
+    { id: 1, x: 3.0, y: groundY - 1.75, z: 1.8, h: 0.85 },   // Viperwolf (a bit lower)
     { id: 4, x: -3.8, y: groundY - 2.15, z: 0.6, h: 1.1 },   // Thanator (same height as Na'vi)
-    { id: 5, x: 2.9, y: groundY - 0.95, z: -1.3, h: 1.05 },  // Direhorse (a bit closer)
+    { id: 5, x: 2.9, y: groundY - 0.6, z: -1.3, h: 1.05 },   // Direhorse (a bit higher)
     { id: 12, x: -1.4, y: groundY - 2.15, z: 1.4, h: 1.0 },  // Na'vi
   ];
   configs.forEach(({ id, x, y, z, h }) => {
