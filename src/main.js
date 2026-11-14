@@ -235,7 +235,7 @@ function loadModel() {
       const bgWrapper = new THREE.Group();
       bgWrapper.add(bgFbx);
       bgWrapper.scale.setScalar(scale);
-      bgWrapper.position.set(0, -0.4, -4.5);
+      bgWrapper.position.set(0, 0.2, 0);
       scene.add(bgWrapper);
 
       onAssetReady();
