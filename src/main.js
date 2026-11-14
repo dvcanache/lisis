@@ -117,7 +117,9 @@ function createNaviTextMesh() {
   return mesh;
 }
 
-// 3D Na'vi text moved to top HTML title
+const naviTextMesh = createNaviTextMesh();
+naviTextMesh.position.set(0, 2.1, -0.5);
+scene.add(naviTextMesh);
 
 function updateDimensions() {
   const width = window.innerWidth;
@@ -165,11 +167,20 @@ function loadModel() {
       wrapper.scale.setScalar(scale);
 
       fbx.traverse((child) => {
-        if (child.isMesh && child.material) {
-          const mats = Array.isArray(child.material) ? child.material : [child.material];
-          mats.forEach((mat) => {
-            mat.side = THREE.DoubleSide;
-          });
+        if (child.isMesh) {
+          const cBox = new THREE.Box3().setFromObject(child);
+          const cSize = cBox.getSize(new THREE.Vector3());
+          const cCenter = cBox.getCenter(new THREE.Vector3());
+          if (cSize.y < Math.max(cSize.x, cSize.z) * 0.25 && cCenter.y < 0) {
+            child.visible = false;
+            return;
+          }
+          if (child.material) {
+            const mats = Array.isArray(child.material) ? child.material : [child.material];
+            mats.forEach((mat) => {
+              mat.side = THREE.DoubleSide;
+            });
+          }
         }
       });
 
@@ -295,6 +306,7 @@ function animate() {
   if (modelRoot) {
     modelRoot.rotation.y += delta * ROT_SPEED;
   }
+  naviTextMesh.position.y = 2.1 + Math.sin(clock.elapsedTime * 1.2) * 0.08;
 
   if (mixer) {
     mixer.update(delta);
