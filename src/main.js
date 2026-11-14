@@ -89,6 +89,8 @@ function createNaviTextMesh() {
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
+  texture.repeat.x = -1;
+  texture.offset.x = 1;
   texture.needsUpdate = true;
 
   const radius = 1.65;
