@@ -197,6 +197,7 @@ function loadModel() {
       });
 
       modelRoot = wrapper;
+      modelRoot.position.y = -1.1;
       scene.add(modelRoot);
 
       if (fbx.animations && fbx.animations.length > 0) {
@@ -293,7 +294,10 @@ function renderAsciiFrame() {
       const ch = RAMP[charIdx];
       if (ch === ' ') continue;
 
-      const color = `rgb(${r},${g},${b})`;
+      const cr = Math.min(255, (r * 1.35) | 0);
+      const cg = Math.min(255, (g * 1.35) | 0);
+      const cb = Math.min(255, (b * 1.35) | 0);
+      const color = `rgb(${cr},${cg},${cb})`;
       if (color !== lastColor) {
         asciiCtx.fillStyle = color;
         lastColor = color;
@@ -324,7 +328,7 @@ function animate() {
   if (modelRoot) {
     modelRoot.rotation.y += delta * ROT_SPEED;
   }
-  naviTextMesh.position.y = -0.95 + Math.sin(clock.elapsedTime * 1.4) * 0.05;
+  naviTextMesh.position.y = -1.75 + Math.sin(clock.elapsedTime * 1.4) * 0.05;
 
   if (mixer) {
     mixer.update(delta);
