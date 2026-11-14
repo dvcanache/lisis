@@ -31,8 +31,10 @@ renderer.toneMappingExposure = 1.15;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-camera.position.set(0, 1.1, 4.2);
+const initialAspect = window.innerWidth / window.innerHeight;
+const camera = new THREE.PerspectiveCamera(45, initialAspect, 0.1, 100);
+const zoomFactor = initialAspect < 1 ? 1 / Math.max(initialAspect, 0.45) : 1;
+camera.position.set(0, 1.1 * zoomFactor, 4.2 * zoomFactor);
 
 const controls = new OrbitControls(camera, asciiCanvas);
 controls.enableDamping = true;
@@ -323,6 +325,12 @@ function autoStartMusic() {
 }
 window.addEventListener('pointerdown', autoStartMusic, { once: true });
 window.addEventListener('touchstart', autoStartMusic, { once: true });
+
+// Attempt immediate autoplay on page load
+bgMusic
+  .play()
+  .then(() => updateMusicUI(true))
+  .catch(() => {});
 
 window.addEventListener('resize', updateDimensions);
 
