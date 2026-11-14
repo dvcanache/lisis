@@ -117,8 +117,7 @@ function createNaviTextMesh() {
   return mesh;
 }
 
-const naviTextMesh = createNaviTextMesh();
-scene.add(naviTextMesh);
+// 3D Na'vi text moved to top HTML title
 
 function updateDimensions() {
   const width = window.innerWidth;
@@ -133,7 +132,7 @@ function groundFlower() {
   const bgBox = new THREE.Box3().setFromObject(bgRoot);
   const flowerBox = new THREE.Box3().setFromObject(modelRoot);
   const deltaY = bgBox.min.y - flowerBox.min.y;
-  modelRoot.position.y += deltaY;
+  modelRoot.position.y += deltaY + 0.55;
   flowerBaseY = modelRoot.position.y;
   controls.target.set(0, flowerBaseY + 0.8, 0);
   controls.update();
@@ -296,7 +295,6 @@ function animate() {
   if (modelRoot) {
     modelRoot.rotation.y += delta * ROT_SPEED;
   }
-  naviTextMesh.position.y = flowerBaseY - 0.6 + Math.sin(clock.elapsedTime * 1.4) * 0.05;
 
   if (mixer) {
     mixer.update(delta);
