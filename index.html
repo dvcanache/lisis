@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>Oel Ngati Kameie — Glowing Flower</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="ascii-canvas"></canvas>
+
+      <div id="loading-overlay">
+        <div class="loader-box">
+          <div class="loader-spinner"></div>
+          <div id="loading-text">Loading...</div>
+        </div>
+      </div>
+
+      <button id="btn-music" class="music-btn" aria-label="Toggle music">
+        <span id="music-icon">♪</span>
+        <span id="music-label">Play Music</span>
+      </button>
+
+      <audio id="bg-music" loop preload="auto" src="/i-see-you-instrumental.mp3"></audio>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
