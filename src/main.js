@@ -172,9 +172,11 @@ scene.add(naviTextMesh);
 function updateDimensions() {
   const width = window.innerWidth;
   const height = window.innerHeight;
-  const pixelScale = 3;
+  const aspect = width / height;
+  const pixelScale = width < 768 ? 2 : 3;
   renderer.setSize(Math.max(1, (width / pixelScale) | 0), Math.max(1, (height / pixelScale) | 0), false);
-  camera.aspect = width / height;
+  camera.fov = aspect < 1 ? 62 : 45;
+  camera.aspect = aspect;
   camera.updateProjectionMatrix();
 }
 
