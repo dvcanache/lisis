@@ -181,7 +181,7 @@ function groundFlower() {
   modelRoot.updateMatrixWorld(true);
   const bgBox = new THREE.Box3().setFromObject(bgRoot);
   const flowerBox = new THREE.Box3().setFromObject(modelRoot);
-  const groundY = bgBox.min.y + 0.55;
+  const groundY = -0.35;
   modelRoot.position.y += groundY - flowerBox.min.y;
   flowerBaseY = modelRoot.position.y;
   controls.target.set(0, groundY + 0.5, 0);
