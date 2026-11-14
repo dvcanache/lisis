@@ -19,18 +19,21 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NoToneMapping;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x030612);
+scene.background = new THREE.Color(0x010208);
 
-// Night sky with many stars
+// Night sky with many colorful stars
 function createStarfield() {
   const count = 1600;
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
   const palette = [
     new THREE.Color(0xffffff),
-    new THREE.Color(0x9be8ff),
-    new THREE.Color(0xc8d8ff),
-    new THREE.Color(0x7bf5ff),
+    new THREE.Color(0x7bf5ff), // cyan
+    new THREE.Color(0xc77dff), // violet
+    new THREE.Color(0xff70d9), // magenta
+    new THREE.Color(0x58f2b8), // mint
+    new THREE.Color(0xffd166), // gold
+    new THREE.Color(0x88b4ff), // blue
   ];
 
   for (let i = 0; i < count; i++) {
