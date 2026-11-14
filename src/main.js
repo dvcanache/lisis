@@ -182,7 +182,7 @@ function groundFlower() {
   const bgBox = new THREE.Box3().setFromObject(bgRoot);
   const flowerBox = new THREE.Box3().setFromObject(modelRoot);
   const groundY = -0.35;
-  modelRoot.position.y += groundY - flowerBox.min.y - 2.1;
+  modelRoot.position.y += groundY - flowerBox.min.y - 2.8;
   flowerBaseY = modelRoot.position.y;
   controls.target.set(0, groundY + 0.5, 0);
   controls.update();
