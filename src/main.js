@@ -28,7 +28,7 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NoToneMapping;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
+scene.background = new THREE.Color(0x050b1a);
 
 const initialAspect = window.innerWidth / window.innerHeight;
 const camera = new THREE.PerspectiveCamera(45, initialAspect, 0.1, 100);
@@ -61,6 +61,8 @@ fillLight.position.set(0, -1.5, 2.5);
 scene.add(fillLight);
 
 let modelRoot = null;
+let bgRoot = null;
+let flowerBaseY = -1.1;
 let mixer = null;
 let renderTarget = null;
 let pixelBuffer = new Uint8Array(0);
@@ -162,9 +164,21 @@ function updateDimensions() {
   }
 }
 
+function groundFlower() {
+  if (!modelRoot || !bgRoot) return;
+  const bgBox = new THREE.Box3().setFromObject(bgRoot);
+  const flowerBox = new THREE.Box3().setFromObject(modelRoot);
+  const deltaY = bgBox.min.y - flowerBox.min.y;
+  modelRoot.position.y += deltaY;
+  flowerBaseY = modelRoot.position.y;
+  controls.target.set(0, flowerBaseY + 0.8, 0);
+  controls.update();
+}
+
 function onAssetReady() {
   onAssetReady.count = (onAssetReady.count || 0) + 1;
   if (onAssetReady.count >= 2) {
+    groundFlower();
     document.getElementById('loader-spinner').classList.add('hidden');
     loadingText.classList.add('hidden');
     document.getElementById('btn-start').classList.remove('hidden');
@@ -249,7 +263,8 @@ function loadModel() {
       bgWrapper.add(bgFbx);
       bgWrapper.scale.setScalar(scale);
       bgWrapper.position.set(0, 0.2, 0);
-      scene.add(bgWrapper);
+      bgRoot = bgWrapper;
+      scene.add(bgRoot);
 
       onAssetReady();
     },
@@ -306,17 +321,6 @@ function renderAsciiFrame() {
       asciiCtx.fillText(ch, x * cellW, drawY);
     }
   }
-
-  // Lightweight GPU-accelerated bloom pass
-  glowCtx.clearRect(0, 0, glowCanvas.width, glowCanvas.height);
-  glowCtx.drawImage(asciiCanvas, 0, 0, glowCanvas.width, glowCanvas.height);
-
-  asciiCtx.save();
-  asciiCtx.globalCompositeOperation = 'lighter';
-  asciiCtx.globalAlpha = GLOW_STRENGTH * 0.55;
-  asciiCtx.filter = 'blur(6px)';
-  asciiCtx.drawImage(glowCanvas, 0, 0, viewWidth, viewHeight);
-  asciiCtx.restore();
 }
 
 const clock = new THREE.Clock();
@@ -328,7 +332,7 @@ function animate() {
   if (modelRoot) {
     modelRoot.rotation.y += delta * ROT_SPEED;
   }
-  naviTextMesh.position.y = -1.75 + Math.sin(clock.elapsedTime * 1.4) * 0.05;
+  naviTextMesh.position.y = flowerBaseY - 0.6 + Math.sin(clock.elapsedTime * 1.4) * 0.05;
 
   if (mixer) {
     mixer.update(delta);
