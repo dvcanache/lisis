@@ -66,7 +66,7 @@ scene.add(createStarfield());
 
 const initialAspect = window.innerWidth / window.innerHeight;
 const camera = new THREE.PerspectiveCamera(45, initialAspect, 0.1, 100);
-const zoomFactor = initialAspect < 1 ? 1 / Math.max(initialAspect, 0.45) : 1;
+const zoomFactor = initialAspect < 1 ? 1.25 : 1;
 camera.position.set(0, 1.1 * zoomFactor, 4.2 * zoomFactor);
 
 const controls = new OrbitControls(camera, asciiCanvas);
