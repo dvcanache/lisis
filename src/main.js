@@ -162,6 +162,15 @@ function updateDimensions() {
   }
 }
 
+function onAssetReady() {
+  onAssetReady.count = (onAssetReady.count || 0) + 1;
+  if (onAssetReady.count >= 2) {
+    document.getElementById('loader-spinner').classList.add('hidden');
+    loadingText.classList.add('hidden');
+    document.getElementById('btn-start').classList.remove('hidden');
+  }
+}
+
 function loadModel() {
   const loader = new FBXLoader();
   loader.load(
@@ -195,9 +204,7 @@ function loadModel() {
         mixer.clipAction(fbx.animations[0]).play();
       }
 
-      document.getElementById('loader-spinner').classList.add('hidden');
-      loadingText.classList.add('hidden');
-      document.getElementById('btn-start').classList.remove('hidden');
+      onAssetReady();
     },
     (xhr) => {
       if (xhr.total > 0) {
@@ -208,6 +215,34 @@ function loadModel() {
     (err) => {
       console.error('Failed to load FBX:', err);
       loadingText.textContent = 'Error loading model.';
+    }
+  );
+
+  // Load Avatar background scene
+  const bgLoader = new FBXLoader();
+  bgLoader.setResourcePath('/avatar-scene/textures/');
+  bgLoader.load(
+    '/avatar-scene/source/Scene Avatar 13_07.fbx',
+    (bgFbx) => {
+      const box = new THREE.Box3().setFromObject(bgFbx);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      const scale = 20 / maxDim;
+
+      bgFbx.position.sub(center);
+      const bgWrapper = new THREE.Group();
+      bgWrapper.add(bgFbx);
+      bgWrapper.scale.setScalar(scale);
+      bgWrapper.position.set(0, -1.8, -5.5);
+      scene.add(bgWrapper);
+
+      onAssetReady();
+    },
+    undefined,
+    (err) => {
+      console.warn('Background scene failed to load:', err);
+      onAssetReady();
     }
   );
 }
