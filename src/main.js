@@ -189,7 +189,7 @@ function groundFlower() {
   const groundY = -0.35;
   modelRoot.position.y += groundY - flowerBox.min.y - 2.8;
   flowerBaseY = modelRoot.position.y;
-  controls.target.set(0, groundY + 0.5, 0);
+  controls.target.set(0, flowerBaseY, 0);
   controls.update();
   addGroundSprites(groundY);
 }
