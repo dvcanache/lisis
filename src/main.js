@@ -183,7 +183,7 @@ function getGroundY(x, z, fallbackY = -1.5) {
   );
   const hits = raycaster.intersectObject(bgRoot, true);
   if (hits.length > 0) {
-    return hits[0].point.y;
+    return hits[hits.length - 1].point.y;
   }
   return fallbackY;
 }
