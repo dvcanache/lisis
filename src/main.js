@@ -25,8 +25,7 @@ const renderer = new THREE.WebGLRenderer({
   powerPreference: 'high-performance',
 });
 renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
+renderer.toneMapping = THREE.NoToneMapping;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
@@ -93,7 +92,7 @@ function createNaviTextMesh() {
   ctx.shadowColor = '#28f0ff';
   ctx.shadowBlur = 16;
   ctx.fillStyle = '#7bf5ff';
-  ctx.fillText('— I SEE YOU —', canvas.width / 2, 345);
+  ctx.fillText('— TE VEO —', canvas.width / 2, 345);
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
@@ -210,12 +209,12 @@ function loadModel() {
     (xhr) => {
       if (xhr.total > 0) {
         const pct = Math.round((xhr.loaded / xhr.total) * 100);
-        loadingText.textContent = `Loading... ${pct}%`;
+        loadingText.textContent = `Cargando... ${pct}%`;
       }
     },
     (err) => {
       console.error('Failed to load FBX:', err);
-      loadingText.textContent = 'Error loading model.';
+      loadingText.textContent = 'Error al cargar el modelo.';
     }
   );
 
@@ -232,6 +231,19 @@ function loadModel() {
       const scale = 12 / maxDim;
 
       bgFbx.position.sub(center);
+      bgFbx.traverse((child) => {
+        if (child.isMesh && child.material) {
+          const mats = Array.isArray(child.material) ? child.material : [child.material];
+          mats.forEach((mat) => {
+            mat.side = THREE.DoubleSide;
+            if (mat.emissiveMap) {
+              mat.emissive = new THREE.Color(0xffffff);
+              mat.emissiveIntensity = 1.6;
+            }
+          });
+        }
+      });
+
       const bgWrapper = new THREE.Group();
       bgWrapper.add(bgFbx);
       bgWrapper.scale.setScalar(scale);
