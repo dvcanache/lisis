@@ -11,10 +11,10 @@ const loadingText = document.getElementById('loading-text');
 
 const renderer = new THREE.WebGLRenderer({
   canvas: asciiCanvas,
-  antialias: true,
+  antialias: false,
   powerPreference: 'high-performance',
 });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.setPixelRatio(1);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NoToneMapping;
 
@@ -109,22 +109,25 @@ function createNaviTextMesh() {
     transparent: true,
     side: THREE.DoubleSide,
     depthWrite: false,
+    depthTest: false,
     blending: THREE.AdditiveBlending,
   });
 
   const mesh = new THREE.Mesh(geom, mat);
+  mesh.renderOrder = 10;
   mesh.position.set(0, -0.95, 0);
   return mesh;
 }
 
 const naviTextMesh = createNaviTextMesh();
-naviTextMesh.position.set(0, 1.05, -0.5);
+naviTextMesh.position.set(0, 1.05, 1.2);
 scene.add(naviTextMesh);
 
 function updateDimensions() {
   const width = window.innerWidth;
   const height = window.innerHeight;
-  renderer.setSize(width, height, false);
+  const pixelScale = 3;
+  renderer.setSize(Math.max(1, (width / pixelScale) | 0), Math.max(1, (height / pixelScale) | 0), false);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
 }
