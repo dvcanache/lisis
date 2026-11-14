@@ -192,10 +192,10 @@ function groundFlower() {
 function addGroundSprites(groundY) {
   const texLoader = new THREE.TextureLoader();
   const configs = [
-    { id: 1, x: 3.0, y: groundY + 0.55, z: 1.8, h: 0.85 },   // Viperwolf (outer)
-    { id: 4, x: -3.8, y: groundY + 0.4, z: 0.6, h: 1.1 },   // Thanator (outer left)
-    { id: 5, x: 3.4, y: groundY + 0.55, z: -1.6, h: 1.05 }, // Direhorse (outer)
-    { id: 12, x: -1.4, y: groundY + 0.35, z: 1.4, h: 1.0 }, // Na'vi (unchanged)
+    { id: 1, x: 3.0, y: groundY - 0.15, z: 1.8, h: 0.85 },   // Viperwolf (outer)
+    { id: 4, x: -3.8, y: groundY - 0.15, z: 0.6, h: 1.1 },   // Thanator (outer left)
+    { id: 5, x: 3.4, y: groundY - 0.15, z: -1.6, h: 1.05 }, // Direhorse (outer)
+    { id: 12, x: -1.4, y: groundY + 0.35, z: 1.4, h: 1.0 },  // Na'vi (unchanged)
   ];
   configs.forEach(({ id, x, y, z, h }) => {
     const num = String(id).padStart(2, '0');
