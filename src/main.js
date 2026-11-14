@@ -122,7 +122,8 @@ function createNaviTextMesh() {
 }
 
 const naviTextMesh = createNaviTextMesh();
-naviTextMesh.position.set(0, 1.05, -2.2);
+naviTextMesh.position.set(0, 1.5, 11);
+naviTextMesh.scale.setScalar(2.4);
 scene.add(naviTextMesh);
 
 function updateDimensions() {
@@ -311,7 +312,7 @@ function animate() {
   if (modelRoot) {
     modelRoot.rotation.y += delta * ROT_SPEED;
   }
-  naviTextMesh.position.y = 1.05 + Math.sin(clock.elapsedTime * 1.2) * 0.08;
+  naviTextMesh.position.y = 1.5 + Math.sin(clock.elapsedTime * 1.2) * 0.1;
 
   if (mixer) {
     mixer.update(delta);
